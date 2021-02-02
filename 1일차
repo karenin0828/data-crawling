@@ -1,0 +1,67 @@
+1. 서버와 통신할떄는 요청을 하고 응답을 받는다.
+누구나 404 not found같은 페이지를 본 적이 있을 것이다.
+서버로부터 응답을 받을 때 3가지 응답을 받는다. status, content, header이다
+status의 종류에는 크게 3가지가 있다. 2xx= 성공, 4xx= 사용자 오류, 5xx= 서버오류
+status를 성공적으로 받았을 때 content와 header를 받을 수 있다. (http상태코드라고
+불리는 것 같기도 하다.)
+
+2. https는 http에서 보안이 강화된 것 s는 security의 약자
+
+3. "http://naver.com:1234/test/test1?id=b&pwd=1234"
+에서 "1234"는 포트이다. 통신을 창문으로 할 것인지 문으로 할 것인지
+test/test1은 폴더라고 한다. 경로를 지정해 주는 것이다.
+뒤에는 아이디와 패스워드가 표기된다. 
+
+4.http라는 통신규약의 통신 방식은 두가지인데 아이디와 패스워드가 표기되느냐 표기되지 않느냐
+에 따라 나뉜다. 이를 숨겨주는 통신방식이 post방식이고 숨겨주지 않는 방식이 get방식이다.
+
+import requests
+response= requests.get('http://naver.com', headers= header)
+import requests
+response= requests.post('http://naver.com', headers= header)
+
+같은 방식으로 긁어온다.
+
+5. 파이썬 통신에서의 주요 모듈은 두가지가 있다. 하나는 requests 다른 하나는 urllib.
+둘의 차이는 세션이 유지되냐 유지되지 않느냐. 유지되는 쪽이 urllib이다.
+세션은 로그인 정보같은 것을 저장하는 것을 맗한다.
+
+import urllib
+response= urllib.get('http://naver.com', headers= header)
+
+같은 방식으로 사용한다.
+
+6. data parsing은 통신을 통해 읽어들인 데이터(html, excel등)를 구조화하는 것을 말한다. 
+html  head   meta
+             title
+       body   p
+              p      (각각 상대적으로 parent, children,sibling(전,후)의 관계를 가진다.)
+              p
+
+대표적인 모듈로 BeautifulSoup가 있다.
+(parsing은 해부, 분석이라는 뜻)
+#
+import urllib
+from bs4 import BeautifulSoup
+
+response= requests.get("http://naver.com")
+
+data= BeautifulSoup(response.text, "html.parser")
+#
+과 같은 방식으로 사용한다. 
+BeautifulSoup(A,B)는 A를 B를 이용해서 구조화 한다는 것을 뜻한다.
+A는 파싱의 방법들인데 html.parser, lxml, html5lib이 있다.
+
+7. 파싱을 하는 이유는 태그를 이용하여 데이터를 쉽게 가져오기 위함이다. 
+
+beautifilsoup으로 구조화하지 않으면 find나 index함수를 이용해서 위치를 찾은다음에
+다시 입력해야하는 번거로운 과정을 거쳐야 한다.
+
+하지만 구조화한 후에는 태그를 이용하여 태그사이의 내용까지 간단하게 가져올 수 있다.
+print(data.title)같은 방식으로. 이떄 결과는 <title>NAVER</title>같은 방식으로
+나오는데, 이때 print(data.title.string)처럼 입력하면 태그 사이의 내용만 출력한다ㅔ갸ㅜ
+
+ print(data.find("title").string)도 같은 결과가 출력된다. ???
+
+
+
